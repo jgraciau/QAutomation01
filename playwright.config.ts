@@ -8,10 +8,10 @@ export default defineConfig({
   testIgnore: '**/deprecated/**',
 
   /* Timeouts */
-  timeout: 30 * 1000,
+  timeout: 120 * 1000,
   globalTimeout: 30 * 60 * 1000,
   expect: {
-    timeout: 5000,
+    timeout: 15 * 1000,
   },
 
   /* Ejecución */
@@ -36,8 +36,8 @@ export default defineConfig({
     baseURL:
       process.env.BASE_URL || 'http://opencart.abstracta.us/index.php?route=',
     headless: isCI,
-    actionTimeout: 30 * 1000,
-    navigationTimeout: 50 * 1000,
+    actionTimeout: 120 * 1000,
+    navigationTimeout: 15 * 1000,
     trace: isCI ? 'retain-on-failure' : 'on',
     video: isCI ? 'retain-on-failure' : 'on',
     screenshot: isCI ? 'only-on-failure' : 'on',

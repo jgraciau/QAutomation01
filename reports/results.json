@@ -31,7 +31,7 @@
         "testMatch": [
           "**/*.spec.ts"
         ],
-        "timeout": 30000
+        "timeout": 120000
       }
     ],
     "quiet": false,
@@ -92,7 +92,7 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 30000,
+                  "timeout": 120000,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -102,7 +102,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10580,
+                      "duration": 10029,
                       "errors": [],
                       "stdout": [
                         {
@@ -123,7 +123,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-08T17:37:38.332Z",
+                      "startTime": "2026-05-08T17:46:58.424Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -159,8 +159,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-05-08T17:37:37.396Z",
-    "duration": 12542.268,
+    "startTime": "2026-05-08T17:46:57.630Z",
+    "duration": 11798.804,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,
