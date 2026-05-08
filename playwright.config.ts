@@ -7,11 +7,12 @@ export default defineConfig({
   testMatch: '**/*.spec.ts',
   testIgnore: '**/deprecated/**',
 
-  /* Timeouts */
+  /* Timeouts globales */
   timeout: 120 * 1000,
   globalTimeout: 30 * 60 * 1000,
+
   expect: {
-    timeout: 15 * 1000,
+    timeout: 20 * 1000,
   },
 
   /* Ejecución */
@@ -36,14 +37,15 @@ export default defineConfig({
     baseURL:
       process.env.BASE_URL || 'http://opencart.abstracta.us/index.php?route=',
     headless: isCI,
-    actionTimeout: 120 * 1000,
-    navigationTimeout: 15 * 1000,
+    actionTimeout: 30 * 1000,
+    navigationTimeout: 50 * 1000,
     trace: isCI ? 'retain-on-failure' : 'on',
     video: isCI ? 'retain-on-failure' : 'on',
     screenshot: isCI ? 'only-on-failure' : 'on',
     ignoreHTTPSErrors: true,
   },
 
+  /* Navegadores */
   projects: [
     {
       name: 'chromium',

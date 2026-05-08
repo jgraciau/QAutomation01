@@ -3,7 +3,7 @@ import { Page, Locator, expect } from '@playwright/test';
 /**
  * Page Object para la página de Checkout de OpenCart
  * Encapsula toda la lógica de interacción con el flujo de checkout
- * 
+ *
  * @class CheckoutPage
  * @example
  * const checkoutPage = new CheckoutPage(page);
@@ -12,7 +12,6 @@ import { Page, Locator, expect } from '@playwright/test';
  */
 export class CheckoutPage {
   readonly page: Page;
-  private readonly DEFAULT_TIMEOUT = 60000;
 
   // Selectors - Checkout Account Step
   readonly guestCheckoutRadio: Locator;
@@ -81,10 +80,15 @@ export class CheckoutPage {
    * @throws Error si los elementos no están disponibles
    */
   async selectGuestCheckout(): Promise<void> {
-    await this.guestCheckoutRadio.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await expect(this.guestCheckoutRadio).toBeVisible();
     await this.guestCheckoutRadio.check();
+    await expect(this.guestCheckoutRadio).toBeChecked();
+
+    await expect(this.continueButton).toBeVisible();
+    await expect(this.continueButton).toBeEnabled();
     await this.continueButton.click();
-    await this.firstNameInput.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+
+    await expect(this.firstNameInput).toBeVisible();
   }
 
   /**
@@ -114,7 +118,8 @@ export class CheckoutPage {
     country: string;
     zone: string;
   }): Promise<void> {
-    // Fill all text inputs
+    await expect(this.firstNameInput).toBeVisible();
+
     await this.firstNameInput.fill(details.firstName);
     await this.lastNameInput.fill(details.lastName);
     await this.emailInput.fill(details.email);
@@ -130,17 +135,23 @@ export class CheckoutPage {
     // Wait for zone to be populated after country selection
     await this.page.waitForFunction(() => {
       const options = document.querySelectorAll('#input-payment-zone option');
-      return Array.from(options).some((option) => option.textContent?.trim() !== '--- Please Select ---');
-    }, { timeout: this.DEFAULT_TIMEOUT });
+      return Array.from(options).some(
+        (option) => option.textContent?.trim() !== '--- Please Select ---'
+      );
+    });
 
     await this.zoneSelect.selectOption({ label: details.zone });
 
     // Use same address for shipping
+    await expect(this.sameAddressCheckbox).toBeVisible();
     await this.sameAddressCheckbox.check();
+
+    await expect(this.guestContinueButton).toBeVisible();
+    await expect(this.guestContinueButton).toBeEnabled();
     await this.guestContinueButton.click();
 
     // Verify we moved to shipping step
-    await this.shippingMethodRadio.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await expect(this.shippingMethodRadio).toBeVisible();
   }
 
   /**
@@ -148,10 +159,14 @@ export class CheckoutPage {
    * @throws Error si el elemento no se puede seleccionar
    */
   async selectShippingMethod(): Promise<void> {
-    await this.shippingMethodRadio.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await expect(this.shippingMethodRadio).toBeVisible();
     await this.shippingMethodRadio.check();
+
+    await expect(this.shippingContinueButton).toBeVisible();
+    await expect(this.shippingContinueButton).toBeEnabled();
     await this.shippingContinueButton.click();
-    await this.paymentMethodRadio.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+
+    await expect(this.paymentMethodRadio).toBeVisible();
   }
 
   /**
@@ -159,11 +174,17 @@ export class CheckoutPage {
    * @throws Error si no se pueden aceptar los términos
    */
   async selectPaymentMethod(): Promise<void> {
-    await this.paymentMethodRadio.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await expect(this.paymentMethodRadio).toBeVisible();
     await this.paymentMethodRadio.check();
+
+    await expect(this.termsCheckbox).toBeVisible();
     await this.termsCheckbox.check();
+
+    await expect(this.paymentContinueButton).toBeVisible();
+    await expect(this.paymentContinueButton).toBeEnabled();
     await this.paymentContinueButton.click();
-    await this.confirmOrderButton.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+
+    await expect(this.confirmOrderButton).toBeVisible();
   }
 
   /**
@@ -172,10 +193,13 @@ export class CheckoutPage {
    * @throws Error si el pedido no se puede confirmar
    */
   async confirmOrder(): Promise<void> {
+    await expect(this.confirmOrderButton).toBeVisible();
+    await expect(this.confirmOrderButton).toBeEnabled();
     await this.confirmOrderButton.click();
+
     // Wait for success page
-    await this.page.waitForURL('index.php?route=checkout/success', { timeout: this.DEFAULT_TIMEOUT });
-    await this.successMessage.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await this.page.waitForURL('**/index.php?route=checkout/success');
+    await expect(this.successMessage).toBeVisible();
   }
 
   /**

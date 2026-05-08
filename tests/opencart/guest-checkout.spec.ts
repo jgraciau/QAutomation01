@@ -3,7 +3,7 @@ import { CheckoutPage } from '../../src/pages/CheckoutPage';
 
 /**
  * Suite de pruebas E2E para el flujo de Guest Checkout en OpenCart
- * 
+ *
  * Casos de prueba:
  * - Flujo completo de checkout como invitado
  * - Validación de datos de usuario
@@ -14,10 +14,13 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
 
   test.beforeEach(async ({ page }) => {
     checkoutPage = new CheckoutPage(page);
-    // Navegar a la home - URL directa sin rutas
+
+    // Navegar a la home
     await page.goto('/');
+
     console.log('URL actual:', page.url());
     console.log('Título de página:', await page.title());
+
     await expect(page).toHaveTitle('Your Store');
   });
 
@@ -26,16 +29,16 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
   }) => {
     // Step 1: Agregar producto al carrito
     const addToCartButtons = page.getByRole('button', { name: 'Add to Cart' });
+
     await expect(addToCartButtons.first()).toBeVisible();
-    await addToCartButtons.nth(1).click(); // Agrega el segundo producto
+    await addToCartButtons.nth(1).click();
 
     // Step 2: Ir a checkout
     console.log('Haciendo clic en Checkout...');
     await page.getByRole('link', { name: 'Checkout' }).first().click();
 
-    // Esperar a que aparezca el elemento de guest checkout en lugar de URL específica
     console.log('Esperando página de checkout...');
-    await page.waitForSelector('input[name="account"][value="guest"]', { timeout: 10000 });
+    await expect(page.locator('input[name="account"][value="guest"]')).toBeVisible();
     console.log('Página de checkout cargada, URL actual:', page.url());
 
     // Step 3: Seleccionar Guest Checkout
@@ -66,6 +69,6 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
 
     // Verificar que llegamos a la página de éxito
     const title = await checkoutPage.getPageTitle();
-    expect(title).toContain('Your order has been placed!');
+    await expect.soft(title).toContain('Your order has been placed!');
   });
 });

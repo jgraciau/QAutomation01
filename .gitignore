@@ -1,16 +1,43 @@
-
-# Playwright
+# Dependencies
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-.vscode/
+
+# Playwright artifacts
+playwright-report/
+test-results/
+reports/
 .playwright-mcp/
-test-output.txt
-billing-form-snapshot.md
-cart-page-snapshot.md
-page-main-snapshot.md
-snapshot.yml
- 
+
+# Playwright cache / local browsers (si decides no versionarlos)
+.playwright/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editors
+.vscode/
+.idea/
+*.iml
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Build / dist
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo

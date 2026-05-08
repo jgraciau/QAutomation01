@@ -1,20 +1,18 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 /**
  * Utilidades y helpers para pruebas de Playwright
  * Proporciona funciones comunes para interacciones con elementos
  */
 export class TestHelpers {
-  private static readonly DEFAULT_TIMEOUT = 60000;
-
   /**
    * Selecciona una opción de un select por etiqueta.
    * Si la etiqueta no existe, selecciona la primera opción válida.
-   * 
+   *
    * @param {Locator} selectLocator - Localizador del elemento select
    * @param {string} label - Etiqueta de la opción a seleccionar
    * @throws Error si no se puede seleccionar la opción
-   * 
+   *
    * @example
    * await TestHelpers.selectOptionByLabelOrFirst(page.locator('#country'), 'United Kingdom');
    */
@@ -22,7 +20,7 @@ export class TestHelpers {
     try {
       // Intenta seleccionar por etiqueta exacta
       const option = selectLocator.locator(`option:has-text("${label}")`);
-      if (await option.count() > 0) {
+      if ((await option.count()) > 0) {
         await selectLocator.selectOption({ label });
         return;
       }
@@ -47,7 +45,7 @@ export class TestHelpers {
    * @throws Error si la página no se carga
    */
   static async waitForPageLoad(page: Page): Promise<void> {
-    await page.waitForLoadState('load', { timeout: this.DEFAULT_TIMEOUT });
+    await page.waitForLoadState('load');
   }
 
   /**
@@ -57,7 +55,7 @@ export class TestHelpers {
    * @throws Error si el campo no se puede completar
    */
   static async fillFormField(locator: Locator, value: string): Promise<void> {
-    await locator.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await expect(locator).toBeVisible();
     await locator.fill(value);
   }
 
@@ -67,7 +65,8 @@ export class TestHelpers {
    * @throws Error si el elemento no se puede hacer clic
    */
   static async clickElement(locator: Locator): Promise<void> {
-    await locator.waitFor({ timeout: this.DEFAULT_TIMEOUT });
+    await expect(locator).toBeVisible();
+    await expect(locator).toBeEnabled();
     await locator.click();
   }
 
@@ -77,7 +76,7 @@ export class TestHelpers {
    * @throws Error si el elemento no es visible
    */
   static async waitForElement(locator: Locator): Promise<void> {
-    await locator.waitFor({ state: 'visible', timeout: this.DEFAULT_TIMEOUT });
+    await expect(locator).toBeVisible();
   }
 
   /**
