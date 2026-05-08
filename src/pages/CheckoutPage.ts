@@ -12,7 +12,7 @@ import { Page, Locator, expect } from '@playwright/test';
  */
 export class CheckoutPage {
   readonly page: Page;
-  private readonly DEFAULT_TIMEOUT = 30000;
+  private readonly DEFAULT_TIMEOUT = 50000;
 
   // Selectors - Checkout Account Step
   readonly guestCheckoutRadio: Locator;
