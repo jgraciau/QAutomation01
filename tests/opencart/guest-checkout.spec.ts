@@ -1,79 +1,64 @@
-import { test, expect, Locator } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { CheckoutPage } from '../../src/pages/CheckoutPage';
 
-async function selectOptionByLabelOrFirst(
-  locator: Locator,
-  label: string
-) {
-  const option = locator.locator(`option:has-text("${label}")`);
-  if (await option.count() > 0) {
-    await locator.selectOption({ label });
-    return;
-  }
+/**
+ * Suite de pruebas E2E para el flujo de Guest Checkout en OpenCart
+ * 
+ * Casos de prueba:
+ * - Flujo completo de checkout como invitado
+ * - Validación de datos de usuario
+ * - Confirmación exitosa de orden
+ */
+test.describe('OpenCart Guest Checkout - End to End', () => {
+  let checkoutPage: CheckoutPage;
 
-  const firstValue = await locator
-    .locator('option:not(:has-text("---"))')
-    .first()
-    .getAttribute('value');
-  if (firstValue) {
-    await locator.selectOption(firstValue);
-  }
-}
-
-test.describe('OpenCart Guest Checkout', () => {
-  test('Completa el checkout como invitado hasta el mensaje de orden colocada', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
+    checkoutPage = new CheckoutPage(page);
+    // Navegar a la home
     await page.goto('common/home');
     await expect(page).toHaveTitle('Your Store');
+  });
 
+  test('E2E: Completa el flujo de checkout como invitado hasta confirmación de orden', async ({
+    page,
+  }) => {
+    // Step 1: Agregar producto al carrito
     const addToCartButtons = page.getByRole('button', { name: 'Add to Cart' });
     await expect(addToCartButtons.first()).toBeVisible();
-    await addToCartButtons.nth(1).click();
+    await addToCartButtons.nth(1).click(); // Agrega el segundo producto
 
-    await page.waitForTimeout(1000);
+    // Step 2: Ir a checkout
     await page.getByRole('link', { name: 'Checkout' }).first().click();
-
     await page.waitForURL('**/checkout/checkout');
-    await page.waitForSelector('input[name="account"][value="guest"]');
 
-    await page.check('input[name="account"][value="guest"]');
-    await page.click('#button-account');
+    // Step 3: Seleccionar Guest Checkout
+    await checkoutPage.selectGuestCheckout();
 
-    await page.waitForSelector('#input-payment-firstname');
-    await page.fill('#input-payment-firstname', 'Test');
-    await page.fill('#input-payment-lastname', 'User');
-    await page.fill('#input-payment-email', 'test.user@example.com');
-    await page.fill('#input-payment-telephone', '0123456789');
-    await page.fill('#input-payment-address-1', '123 Test Street');
-    await page.fill('#input-payment-address-2', 'Suite 101');
-    await page.fill('#input-payment-city', 'London');
-    await page.fill('#input-payment-postcode', 'EC1A 1BB');
-
-    const countrySelect = page.locator('#input-payment-country');
-    await selectOptionByLabelOrFirst(countrySelect, 'United Kingdom');
-
-    const zoneSelect = page.locator('#input-payment-zone');
-    await page.waitForFunction(() => {
-      const options = document.querySelectorAll('#input-payment-zone option');
-      return Array.from(options).some((option) => option.textContent?.trim() !== '--- Please Select ---');
+    // Step 4: Completar detalles de facturación
+    await checkoutPage.fillBillingDetails({
+      firstName: 'Test',
+      lastName: 'User',
+      email: 'test.user@example.com',
+      telephone: '0123456789',
+      address1: '123 Test Street',
+      address2: 'Suite 101',
+      city: 'London',
+      postcode: 'EC1A 1BB',
+      country: 'United Kingdom',
+      zone: 'Greater London',
     });
-    await selectOptionByLabelOrFirst(zoneSelect, 'Greater London');
 
-    await page.check('#collapse-payment-address input[name="shipping_address"]');
-    await page.click('#button-guest');
+    // Step 5: Seleccionar método de envío
+    await checkoutPage.selectShippingMethod();
 
-    await page.waitForSelector('#collapse-shipping-method input[type="radio"]');
-    await page.locator('#collapse-shipping-method input[type="radio"]').first().check();
-    await page.click('#button-shipping-method');
+    // Step 6: Seleccionar método de pago
+    await checkoutPage.selectPaymentMethod();
 
-    await page.waitForSelector('#collapse-payment-method input[type="radio"]');
-    await page.locator('#collapse-payment-method input[type="radio"]').first().check();
-    await page.check('#collapse-payment-method input[name="agree"]');
-    await page.click('#button-payment-method');
+    // Step 7: Confirmar orden
+    await checkoutPage.confirmOrder();
 
-    await page.waitForSelector('#button-confirm');
-    await page.click('#button-confirm');
-
-    await page.waitForURL('**/checkout/success');
-    await expect(page).toHaveTitle(/Your order has been placed!/);
-    await expect(page.getByText('Your order has been placed!')).toBeVisible();
+    // Verificar que llegamos a la página de éxito
+    const title = await checkoutPage.getPageTitle();
+    expect(title).toContain('Your order has been placed!');
   });
 });
