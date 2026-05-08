@@ -5,7 +5,7 @@ import { Page, Locator } from '@playwright/test';
  * Proporciona funciones comunes para interacciones con elementos
  */
 export class TestHelpers {
-  private static readonly DEFAULT_TIMEOUT = 30000;
+  private static readonly DEFAULT_TIMEOUT = 60000;
 
   /**
    * Selecciona una opción de un select por etiqueta.

@@ -1,6 +1,6 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="12.054977000000001">
-<testsuite name="opencart\guest-checkout.spec.ts" timestamp="2026-05-08T17:06:12.364Z" hostname="chromium" tests="1" failures="0" skipped="0" time="10.333" errors="0">
-<testcase name="OpenCart Guest Checkout - End to End › E2E: Completa el flujo de checkout como invitado hasta confirmación de orden" classname="opencart\guest-checkout.spec.ts" time="10.333">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="12.542268">
+<testsuite name="opencart\guest-checkout.spec.ts" timestamp="2026-05-08T17:37:37.504Z" hostname="chromium" tests="1" failures="0" skipped="0" time="10.58" errors="0">
+<testcase name="OpenCart Guest Checkout - End to End › E2E: Completa el flujo de checkout como invitado hasta confirmación de orden" classname="opencart\guest-checkout.spec.ts" time="10.58">
 <system-out>
 <![CDATA[URL actual: http://opencart.abstracta.us/
 Título de página: Your Store
