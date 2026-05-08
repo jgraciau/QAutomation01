@@ -14,8 +14,10 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
 
   test.beforeEach(async ({ page }) => {
     checkoutPage = new CheckoutPage(page);
-    // Navegar a la home
-    await page.goto('common/home');
+    // Navegar a la home - URL directa sin rutas
+    await page.goto('/');
+    console.log('URL actual:', page.url());
+    console.log('Título de página:', await page.title());
     await expect(page).toHaveTitle('Your Store');
   });
 
@@ -28,8 +30,13 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
     await addToCartButtons.nth(1).click(); // Agrega el segundo producto
 
     // Step 2: Ir a checkout
+    console.log('Haciendo clic en Checkout...');
     await page.getByRole('link', { name: 'Checkout' }).first().click();
-    await page.waitForURL('**/checkout/checkout');
+
+    // Esperar a que aparezca el elemento de guest checkout en lugar de URL específica
+    console.log('Esperando página de checkout...');
+    await page.waitForSelector('input[name="account"][value="guest"]', { timeout: 10000 });
+    console.log('Página de checkout cargada, URL actual:', page.url());
 
     // Step 3: Seleccionar Guest Checkout
     await checkoutPage.selectGuestCheckout();

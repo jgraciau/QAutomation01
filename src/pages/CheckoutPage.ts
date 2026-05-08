@@ -174,7 +174,7 @@ export class CheckoutPage {
   async confirmOrder(): Promise<void> {
     await this.confirmOrderButton.click();
     // Wait for success page
-    await this.page.waitForURL('**/checkout/success', { timeout: this.DEFAULT_TIMEOUT });
+    await this.page.waitForURL('index.php?route=checkout/success', { timeout: this.DEFAULT_TIMEOUT });
     await this.successMessage.waitFor({ timeout: this.DEFAULT_TIMEOUT });
   }
 

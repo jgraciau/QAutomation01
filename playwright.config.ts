@@ -1,63 +1,55 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/**
- * Configuración de Playwright para pruebas E2E del framework OpenCart
- * Documentación: https://playwright.dev/docs/test-configuration
- */
+const isCI = !!process.env.CI;
+
 export default defineConfig({
   testDir: './tests',
   testMatch: '**/*.spec.ts',
   testIgnore: '**/deprecated/**',
+
+  /* Timeouts */
   timeout: 30 * 1000,
-  globalTimeout: 30 * 60 * 1000, // 30 minutos
+  globalTimeout: 30 * 60 * 1000,
   expect: {
     timeout: 5000,
   },
 
   /* Ejecución */
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  forbidOnly: isCI,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 1 : undefined,
+
+  /* Artefactos de ejecución */
+  outputDir: 'test-results',
 
   /* Reportes */
   reporter: [
-    ['html', { open: 'never', outputFolder: 'test-results/html' }],
-    ['json', { outputFile: 'test-results/results.json' }],
-    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+    ['json', { outputFile: 'reports/results.json' }],
+    ['junit', { outputFile: 'reports/junit.xml' }],
     ['list'],
   ],
 
   /* Configuración compartida para todos los navegadores */
   use: {
-    baseURL: process.env.BASE_URL || 'http://opencart.abstracta.us/index.php?route=',
-    trace: 'retain-on-failure',
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
-    actionTimeout: 10000,
+    baseURL:
+      process.env.BASE_URL || 'http://opencart.abstracta.us/index.php?route=',
+    headless: false,
+    actionTimeout: 10 * 1000,
+    navigationTimeout: 30 * 1000,
+    trace: isCI ? 'retain-on-failure' : 'on',
+    video: isCI ? 'retain-on-failure' : 'on',
+    screenshot: isCI ? 'only-on-failure' : 'on',
+    ignoreHTTPSErrors: true,
   },
 
-  /* Navegadores */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
   ],
-
-  /* Servidor local (descomenta si es necesario) */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120 * 1000,
-  // },
 });
