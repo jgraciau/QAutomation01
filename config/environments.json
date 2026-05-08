@@ -1,0 +1,20 @@
+{
+  "environments": {
+    "staging": {
+      "baseUrl": "http://opencart.abstracta.us/index.php?route=",
+      "timeout": 30000,
+      "retries": 2
+    },
+    "production": {
+      "baseUrl": "https://opencart.abstracta.us/index.php?route=",
+      "timeout": 60000,
+      "retries": 3
+    },
+    "local": {
+      "baseUrl": "http://localhost:8080/index.php?route=",
+      "timeout": 30000,
+      "retries": 0
+    }
+  },
+  "defaultEnvironment": "staging"
+}

@@ -1,0 +1,36 @@
+{
+  "users": {
+    "guest": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "telephone": "1234567890"
+    },
+    "registered": {
+      "email": "test@example.com",
+      "password": "password123"
+    }
+  },
+  "addresses": {
+    "default": {
+      "address1": "123 Main St",
+      "address2": "Apt 4B",
+      "city": "New York",
+      "postcode": "10001",
+      "country": "United States",
+      "zone": "New York"
+    }
+  },
+  "products": [
+    {
+      "name": "iPhone",
+      "category": "Phones & PDAs",
+      "price": 123.20
+    },
+    {
+      "name": "MacBook",
+      "category": "Laptops & Notebooks",
+      "price": 602.00
+    }
+  ]
+}

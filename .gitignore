@@ -6,3 +6,11 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+.vscode/
+.playwright-mcp/
+test-output.txt
+billing-form-snapshot.md
+cart-page-snapshot.md
+page-main-snapshot.md
+snapshot.yml
+ 

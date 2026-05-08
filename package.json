@@ -1,9 +1,16 @@
 {
   "name": "qautomation01",
   "version": "1.0.0",
-  "description": "",
+  "description": "Framework de automatización Playwright para OpenCart Guest Checkout",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ci": "npx playwright test --reporter=line",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
+    "report": "npx playwright show-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
