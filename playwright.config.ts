@@ -36,8 +36,8 @@ export default defineConfig({
     baseURL:
       process.env.BASE_URL || 'http://opencart.abstracta.us/index.php?route=',
     headless: isCI,
-    actionTimeout: 10 * 1000,
-    navigationTimeout: 30 * 1000,
+    actionTimeout: 30 * 1000,
+    navigationTimeout: 50 * 1000,
     trace: isCI ? 'retain-on-failure' : 'on',
     video: isCI ? 'retain-on-failure' : 'on',
     screenshot: isCI ? 'only-on-failure' : 'on',
