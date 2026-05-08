@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Opencart abstracta E2E Tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
 

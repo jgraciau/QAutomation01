@@ -6,10 +6,10 @@
     "fullyParallel": true,
     "globalSetup": null,
     "globalTeardown": null,
-    "globalTimeout": 1800000,
+    "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
-    "maxFailures": 0,
+    "maxFailures": 1,
     "metadata": {
       "actualWorkers": 1
     },
@@ -31,7 +31,7 @@
         "testMatch": [
           "**/*.spec.ts"
         ],
-        "timeout": 120000
+        "timeout": 0
       }
     ],
     "quiet": false,
@@ -69,7 +69,7 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.59.1",
-    "workers": 7,
+    "workers": 1,
     "webServer": null
   },
   "suites": [
@@ -92,7 +92,7 @@
               "tags": [],
               "tests": [
                 {
-                  "timeout": 120000,
+                  "timeout": 0,
                   "annotations": [],
                   "expectedStatus": "passed",
                   "projectId": "chromium",
@@ -102,7 +102,7 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 11023,
+                      "duration": 45919,
                       "errors": [],
                       "stdout": [
                         {
@@ -123,7 +123,7 @@
                       ],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-08T18:09:07.871Z",
+                      "startTime": "2026-05-08T18:23:06.807Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -159,8 +159,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-05-08T18:09:07.039Z",
-    "duration": 13040.684,
+    "startTime": "2026-05-08T18:23:05.993Z",
+    "duration": 48361.462,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

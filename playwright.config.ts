@@ -39,9 +39,12 @@ export default defineConfig({
     headless: isCI,
     actionTimeout: 30 * 1000,
     navigationTimeout: 50 * 1000,
-    trace: isCI ? 'retain-on-failure' : 'on',
-    video: isCI ? 'retain-on-failure' : 'on',
-    screenshot: isCI ? 'only-on-failure' : 'on',
+    
+    /* Evidencias */
+    trace: isCI ? 'on-first-retry' : 'on',
+    video: 'on',
+    screenshot: 'on',
+
     ignoreHTTPSErrors: true,
   },
 
