@@ -27,8 +27,8 @@ export default defineConfig({
   /* Reportes */
   reporter: [
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
-    ['json', { outputFile: 'reports/results.json' }],
-    ['junit', { outputFile: 'reports/junit.xml' }],
+    ['json', { outputFile: 'test-results/results.json' }],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
     ['list'],
   ],
 
@@ -42,8 +42,8 @@ export default defineConfig({
     
     /* Evidencias */
     trace: isCI ? 'on-first-retry' : 'on',
-    video: 'on',
-    screenshot: 'on',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
 
     ignoreHTTPSErrors: true,
   },

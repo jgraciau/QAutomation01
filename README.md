@@ -1,147 +1,88 @@
 # QAutomation01 - Framework de Automatización E2E
 
-> **Framework moderno de pruebas E2E con Playwright para OpenCart**  
-> Arquitectura empresarial • Código limpio • Mantenible y escalable
+> Framework de pruebas E2E con Playwright para OpenCart.
+> 
+> Arquitectura limpia, Page Object Model y configuraciones listas para CI.
 
 ---
 
 ## 📋 Tabla de Contenidos
 
-- [Descripción General](#descripción-general)
-- [Características Principales](#características-principales)
-- [Requisitos Previos](#requisitos-previos)
+- [Descripción](#descripción)
+- [Requisitos](#requisitos)
 - [Instalación](#instalación)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Configuración](#configuración)
 - [Ejecución de Pruebas](#ejecución-de-pruebas)
-- [Arquitectura y Patrones](#arquitectura-y-patrones)
-- [Mejores Prácticas](#mejores-prácticas)
+- [Arquitectura](#arquitectura)
 - [Troubleshooting](#troubleshooting)
 - [Contribuir](#contribuir)
 
 ---
 
-## Descripción General
+## Descripción
 
-**QAutomation01** es un framework de automatización de pruebas End-to-End (E2E) diseñado con estándares empresariales. Utiliza **Playwright** como motor de automatización y **TypeScript** para garantizar tipado fuerte y código mantenible.
+**QAutomation01** es un framework E2E construido con **Playwright** y **TypeScript** para automatizar el flujo de checkout en **OpenCart Demo Store**.
 
-Este proyecto implementa el patrón **Page Object Model (POM)** que proporciona:
-- ✅ Separación clara entre lógica de prueba e implementación de UI
-- ✅ Reutilización de código
-- ✅ Mantenimiento simplificado
-- ✅ Escalabilidad a nivel empresarial
+Esta solución está diseñada para:
+- Separar lógica de UI y tests con **Page Object Model (POM)**.
+- Facilitar mantenimiento y escalabilidad.
+- Generar evidencia con **screenshots**, **videos** y **trazas**.
+- Ejecutarse en **CI/CD** con reintentos automáticos.
 
-### Aplicación Bajo Prueba
+### Aplicación bajo prueba
 
-- **Nombre:** OpenCart Demo Store
-- **URL:** [http://opencart.abstracta.us](http://opencart.abstracta.us)
-- **Funcionalidad Principal:** Checkout como invitado (Guest Checkout)
-
----
-
-## Características Principales
-
-### 🎯 Funcionalidades
-
-- **Page Object Model:** Encapsulación completa de elementos y acciones
-- **TypeScript:** Tipado fuerte con soporte a interfaces personalizadas
-- **Múltiples Navegadores:** Chromium, Firefox, WebKit
-- **Reportes Avanzados:** HTML, JSON, JUnit
-- **Captura de Evidencia:** Screenshots y videos en fallos
-- **Trazas:** Traces detallados para debugging
-- **Datos Parametrizados:** Configuración centralizada
-- **CI/CD Ready:** Integración lista para pipelines
-
-### 🚀 Rendimiento
-
-- Ejecución paralela de pruebas
-- Timeouts configurables
-- Reintentos automáticos en CI
-- Workers optimizados
+- **URL:** http://opencart.abstracta.us
+- **Funcionalidad principal:** Guest Checkout
 
 ---
 
-## Requisitos Previos
+## Requisitos
 
-| Requisito | Versión Mínima |
-|-----------|---|
-| Node.js | 18.x |
-| npm | 8.x |
-| Git | 2.0+ |
+- Node.js 18.x
+- npm 8.x
+- Git 2.0+
 
 ```bash
-node --version     # v18.x.x
-npm --version      # 8.x.x
+node --version
+npm --version
 ```
 
 ---
 
 ## Instalación
 
-### 1. Clonar el Repositorio
-
 ```bash
 git clone <url-del-repositorio>
 cd QAutomation01
-```
-
-### 2. Instalar Dependencias
-
-```bash
 npm install
-```
-
-### 3. Instalar Navegadores Playwright
-
-```bash
 npx playwright install
-```
-
-### 4. Verificar Instalación
-
-```bash
-npm run test -- --version
 ```
 
 ---
 
 ## Estructura del Proyecto
 
-```
+```text
 QAutomation01/
-│
-├── src/                             # Código fuente
-│   ├── pages/                       # Page Objects
-│   │   └── CheckoutPage.ts          # Lógica de checkout
-│   ├── utils/                       # Utilidades
-│   │   └── TestHelpers.ts           # Funciones auxiliares
-│   └── test-data/                   # Datos de prueba
-│       └── checkoutData.ts          # Datos centralizados
-│
-├── tests/                           # Casos de prueba
+├── config/                      # Configuraciones y datos
+│   ├── environments.json
+│   └── test-data.json
+├── docs/                        # Documentación adicional
+│   ├── README.md
+│   └── technical-docs.md
+├── src/                         # Lógica del framework
+│   ├── pages/                   # Page Objects
+│   │   └── CheckoutPage.ts
+│   ├── test-data/               # Datos de prueba TS
+│   └── utils/                   # Utilidades compartidas
+├── tests/                       # Suites de prueba Playwright
 │   └── opencart/
-│       └── guest-checkout.spec.ts   # Suite E2E principal
-│
-├── config/                          # Configuración
-│   ├── environments.json            # Por entorno
-│   └── test-data.json               # Datos en JSON
-│
-├── docs/                            # Documentación
-│   ├── README.md                    # Docs principales
-│   └── technical-docs.md            # Detalles técnicos
-│
-├── scripts/                         # Scripts personalizados
-│   └── run-tests.sh                 # Ejecución
-│
-├── test-results/                    # Reportes y evidencia
-│   ├── html/                        # Reporte HTML
-│   ├── results.json                 # Resultados JSON
-│   └── junit.xml                    # Reporte JUnit
-│
-├── playwright.config.ts             # Configuración Playwright
-├── package.json                     # Scripts y dependencias
-├── .env.example                     # Variables de entorno
-└── README.md                        # Este archivo
+│       └── guest-checkout.spec.ts
+├── playwright.config.ts         # Configuración de Playwright
+├── package.json                 # Scripts y dependencias
+├── .env.example                 # Variables de entorno
+└── README.md                    # Documentación principal
 ```
 
 ### Descripción de Carpetas Clave
@@ -153,7 +94,7 @@ Encapsulan la interacción con elementos UI de cada página.
 ```typescript
 export class CheckoutPage {
   readonly firstNameInput: Locator;
-  
+
   async fillBillingDetails(details: BillingDetails): Promise<void> {
     // Lógica centralizada
   }
@@ -163,37 +104,34 @@ export class CheckoutPage {
 #### `src/utils/` - Utilidades
 
 Funciones auxiliares reutilizables:
-- `selectOptionByLabelOrFirst()`: Selecciona opciones en dropdowns
 - `waitForElement()`: Esperas seguras
-- `generateRandomTestData()`: Datos aleatorios
+- `formatCurrency()`: Formateo de valores
+- `generateRandomTestData()`: Datos de prueba
 
 #### `tests/` - Casos de Prueba
 
-Suite de pruebas organizadas por funcionalidad. Convención: `*.spec.ts`
+Suite de pruebas organizada por dominio.
 
 #### `config/` - Configuración
 
-- `environments.json`: URLs, timeouts, retries por entorno
-- `test-data.json`: Datos centralizados
+- `environments.json`: URLs y timeouts por entorno
+- `test-data.json`: Datos de prueba centralizados
 
 ---
 
 ## Configuración
 
-### Archivo: `playwright.config.ts`
+### `playwright.config.ts`
 
-```typescript
-export default defineConfig({
-  testDir: './tests',
-  timeout: 30 * 1000,              // 30 segundos por test
-  expect: { timeout: 5000 },       // 5 segundos para aserciones
-  fullyParallel: true,             // Ejecución paralela
-  retries: process.env.CI ? 2 : 0, // Reintentos en CI
-  workers: process.env.CI ? 1 : undefined,
-});
-```
+- `testDir`: `./tests`
+- `outputDir`: `test-results`
+- `reporter`: `list`
+- `trace`: habilitado en retry mode
+- `video`: `retain-on-failure`
+- `screenshot`: `only-on-failure`
+- `ignoreHTTPSErrors`: true
 
-### Archivo: `.env.example`
+### `.env.example`
 
 ```bash
 BASE_URL=http://opencart.abstracta.us/index.php?route=
@@ -202,7 +140,7 @@ HEADED=false
 DEBUG=false
 ```
 
-### Archivo: `config/environments.json`
+### `config/environments.json`
 
 ```json
 {
@@ -223,99 +161,64 @@ DEBUG=false
 
 ## Ejecución de Pruebas
 
-### Scripts Disponibles
+### Scripts disponibles
 
-#### Ejecutar Todas las Pruebas
+```bash
+npm run test
+npm run test:ci
+npm run test:headed
+npm run test:debug
+npm run test:ui
+npm run report
+```
+
+### Ejecutar todas las pruebas
 
 ```bash
 npm run test
 ```
 
-Ejecuta en paralelo, genera reporte HTML y muestra resultados.
-
-#### Modo Visual (Headed)
-
-```bash
-npm run test:headed
-```
-
-Abre navegador visible para debugging.
-
-#### Debug Interactivo
-
-```bash
-npm run test:debug
-```
-
-Abre Playwright Inspector para control paso a paso.
-
-#### Interfaz Web
-
-```bash
-npm run test:ui
-```
-
-Interface web interactiva para seleccionar y ejecutar tests.
-
-#### Para CI/CD
+### Modo CI
 
 ```bash
 npm run test:ci
 ```
 
-Usa reporter minimalist, 1 worker, reintentos automáticos.
+### Headed
 
-#### Ver Reportes
+```bash
+npm run test:headed
+```
+
+### Debug
+
+```bash
+npm run test:debug
+```
+
+### Ver reportes
 
 ```bash
 npm run report
 ```
 
-Abre reporte HTML con videos y screenshots.
-
-### Ejecutar Pruebas Específicas
+### Ejecutar pruebas específicas
 
 ```bash
-# Una suite específica
 npx playwright test tests/opencart/guest-checkout.spec.ts
-
-# Un test específico
 npx playwright test -g "Completa el flujo"
-
-# Navegador específico
 npx playwright test --project=chromium
-npx playwright test --project=firefox
-npx playwright test --project=webkit
-
-# Combinados
-npx playwright test tests/opencart/ --project=chromium --headed
-```
-
-### Usando Scripts Personalizados
-
-```bash
-./scripts/run-tests.sh chromium headed
-./scripts/run-tests.sh firefox debug
 ```
 
 ---
 
-## Arquitectura y Patrones
+## Arquitectura
 
 ### Page Object Model (POM)
 
-Patrón de diseño que encapsula lógica de UI en clases reutilizables.
-
-**Ventajas:**
-- ✅ Separación de responsabilidades
-- ✅ Mantenimiento centralizado
-- ✅ Reutilización de código
-- ✅ Tests legibles
-
-**Ejemplo:**
+Este proyecto usa Page Objects para encapsular la lógica de UI y mantener los tests limpios.
 
 ```typescript
-// Page Object
 export class CheckoutPage {
   constructor(page: Page) {
     this.firstNameInput = page.locator('#input-payment-firstname');
@@ -323,41 +226,23 @@ export class CheckoutPage {
 
   async fillBillingDetails(details: BillingDetails): Promise<void> {
     await this.firstNameInput.fill(details.firstName);
-    // Más acciones...
   }
 }
-
-// Test (limpio y legible)
-test('Complete checkout', async ({ page }) => {
-  const checkout = new CheckoutPage(page);
-  await checkout.fillBillingDetails(testData);
-  await checkout.confirmOrder();
-});
 ```
 
-### Estrategias de Espera
+### Estrategias de espera
 
-**❌ EVITAR:**
+**Evitar:**
+
 ```typescript
-await page.waitForTimeout(1000);  // Deprecated
+await page.waitForTimeout(1000);
 ```
 
-**✅ USAR:**
+**Usar:**
+
 ```typescript
 await element.waitFor({ state: 'visible' });
 await page.waitForURL('**/checkout/success');
-await page.waitForFunction(() => /* condición */);
-```
-
-### Datos Parametrizados
-
-```typescript
-import * as config from '../config/test-data.json';
-
-test('Checkout', async ({ page }) => {
-  const checkout = new CheckoutPage(page);
-  await checkout.fillBillingDetails(config.addresses.default);
-});
 ```
 
 ---
@@ -513,156 +398,4 @@ npx playwright show-trace trace.zip
 - [ ] Sin código comentado
 - [ ] README actualizado si es necesario
 
----
-
-## Contacto y Soporte
-
-Para preguntas o soporte:
-- 📧 Crear un issue en el repositorio
-- 📚 [Documentación Playwright](https://playwright.dev)
-- 🔗 [Page Object Model Best Practices](https://docs.microsoft.com/en-us/archive/msdn-magazine/2012/december/msdn-magazine-automation-patterns-page-object-pattern)
-
----
-
-**Última actualización:** 2026-05-08  
-**Versión:** 1.0.0  
-**Estado:** ✅ Producción
-
-## Estructura de Ingeniería Recomendada
-
-Para un proyecto de automatización empresarial, recomendamos la siguiente arquitectura:
-
-### 1. **tests/** - Casos de Prueba
-   - Organizados por dominio/funcionalidad (ej: `opencart/`, `user-management/`)
-   - Nombres descriptivos: `guest-checkout.spec.ts`, `login-validation.spec.ts`
-   - Evitar lógica compleja; usar Page Objects para interacciones.
-
-### 2. **src/pages/** - Page Objects
-   - Clases que encapsulan la lógica de cada página.
-   - Ejemplo: `CheckoutPage.ts`, `HomePage.ts`
-   - Métodos como `fillBillingDetails()`, `selectPaymentMethod()`
-
-### 3. **src/utils/** - Utilidades
-   - Helpers para selecciones dinámicas, esperas personalizadas.
-   - Generadores de datos de prueba, validadores.
-   - Ejemplo: `test-helpers.ts`, `data-generators.ts`
-
-### 4. **src/fixtures/** - Fixtures Personalizadas
-   - Configuraciones de prueba reutilizables.
-   - Setup/teardown común entre tests.
-
-### 5. **docs/** - Documentación
-   - Planes de prueba, guías de ejecución.
-   - Documentación técnica y arquitectura.
-
-### 6. **scripts/** - Automatización
-   - Scripts de CI/CD, configuración.
-   - Utilidades para ejecución local.
-
-### 7. **test-results/** - Resultados
-   - Reportes HTML, screenshots de fallos.
-   - Archivos de log y traces.
-
-## Principios de Ingeniería
-
-### Arquitectura
-- **Page Object Model**: Separación clara entre lógica de prueba y UI.
-- **Single Responsibility**: Cada clase/módulo tiene una responsabilidad única.
-- **DRY (Don't Repeat Yourself)**: Reutilización de código mediante helpers y fixtures.
-
-### Calidad de Código
-- **TypeScript**: Tipado fuerte para mayor robustez.
-- **Linting**: ESLint para consistencia de código.
-- **Pre-commit hooks**: Validaciones automáticas antes de commits.
-
-### Ejecución y Mantenimiento
-- **Configuración centralizada**: `playwright.config.ts` para entornos.
-- **Datos parametrizados**: Archivos JSON para datos de prueba.
-- **Reportes detallados**: HTML reports con screenshots y traces.
-
-### Escalabilidad
-- **Paralelización**: Ejecución concurrente para velocidad.
-- **CI/CD**: Integración continua con pipelines automatizados.
-- **Versionado**: Control de versiones para estabilidad.
-
-## Ejecución de Pruebas
-
-### Requisitos Previos
-- Node.js 18+
-- npm o yarn
-
-### Instalación
-```bash
-npm install
-```
-
-### Ejecutar Pruebas
-```bash
-# Todas las pruebas
-npm run test
-
-# Pruebas en modo visual
-npm run test:headed
-
-# Pruebas en modo debug
-npm run test:debug
-
-# Pruebas específicas
-npx playwright test tests/opencart/guest-checkout.spec.ts
-
-# Con reporte HTML
-npx playwright show-report
-```
-
-### Usando Scripts
-```bash
-# Ejecutar con script personalizado
-./scripts/run-tests.sh chromium headed
-```
-
-## Mejores Prácticas
-
-1. **Selectores Robustos**: Usar data-testid, roles ARIA, o selectores únicos.
-2. **Waits Apropiados**: Evitar `waitForTimeout`; usar `waitFor` con condiciones.
-3. **Datos de Prueba**: Centralizar y parametrizar datos sensibles.
-4. **Manejo de Errores**: Capturar screenshots en fallos para debugging.
-5. **Nombres Descriptivos**: Tests y métodos autoexplicativos.
-6. **Documentación**: Mantener README y docs actualizados.
-   - Extensiones de Playwright fixtures para setup común.
-   - Ejemplo: `authenticated-user.ts`, `cart-with-items.ts`
-
-### 5. **config/** - Configuraciones
-   - `environments.json`: URLs, credenciales por entorno (dev, staging, prod)
-   - `test-data.json`: Datos estáticos para pruebas
-   - Variables de entorno con `.env` files
-
-### 6. **docs/** - Documentación
-   - Planes de prueba, guías de contribución.
-   - Arquitectura del framework, convenciones de código.
-
-### 7. **scripts/** - Automatización de CI/CD
-   - Scripts para ejecutar pruebas en diferentes entornos.
-   - Generación de reportes, limpieza de datos.
-
-## Principios de Diseño
-
-- **Page Object Model**: Separar lógica de prueba de implementación de UI.
-- **Data-Driven Testing**: Usar fixtures y datos externos para variabilidad.
-- **Parallel Execution**: Configurar para ejecución paralela en CI.
-- **Reporting**: HTML reports con screenshots/videos en fallos.
-- **Version Control**: Commits claros, branches por feature.
-
-## Cómo ejecutar
-
-- `npm install`
-- `npm test` - Ejecuta todas las pruebas
-- `npm run test:ci` - Para CI (sin UI)
-- `npm run test:headed` - Con navegador visible
-- `npm run report` - Ver reportes
-
-## Notas de organización
-
-- Los archivos de prueba temporales y de depuración se migraron a documentación o se marcaron como obsoletos.
-- La carpeta `tests/opencart/` es el punto de entrada actual para los casos E2E.
-- Archivos de snapshot y resultados generados están identificados como artefactos temporales y no forman parte del flujo principal.
 

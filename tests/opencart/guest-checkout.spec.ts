@@ -53,9 +53,9 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
       address1: '123 Test Street',
       address2: 'Suite 101',
       city: 'London',
-      postcode: 'EC1A 1BB',
-      country: 'United Kingdom',
-      zone: 'Greater London',
+      postcode: '8655454',
+      country: 'Colombia',
+      zone: 'Antioquia',
     });
 
     // Step 5: Seleccionar método de envío

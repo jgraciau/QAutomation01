@@ -34,7 +34,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
 
-      - name: Upload Playwright HTML report
+      - name: Upload HTML report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -42,18 +42,10 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Upload test results
+      - name: Upload execution artifacts
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
           name: test-results
           path: test-results/
-          retention-days: 30
-
-      - name: Upload machine-readable reports
-        uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
-        with:
-          name: reports
-          path: reports/
           retention-days: 30

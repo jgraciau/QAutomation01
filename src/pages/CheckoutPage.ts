@@ -66,10 +66,10 @@ export class CheckoutPage {
     this.guestContinueButton = page.locator('#button-guest');
 
     // Shipping & Payment Selectors
-    this.shippingMethodRadio = page.locator('#collapse-shipping-method input[type="radio"]').first();
+    this.shippingMethodRadio = page.locator('input[name="shipping_method"]').first();
     this.shippingContinueButton = page.locator('#button-shipping-method');
-    this.paymentMethodRadio = page.locator('#collapse-payment-method input[type="radio"]').first();
-    this.termsCheckbox = page.locator('#collapse-payment-method input[name="agree"]');
+    this.paymentMethodRadio = page.locator('input[name="payment_method"]').first();
+    this.termsCheckbox = page.locator('input[name="agree"]');
     this.paymentContinueButton = page.locator('#button-payment-method');
     this.confirmOrderButton = page.locator('#button-confirm');
     this.successMessage = page.getByText('Your order has been placed!');
@@ -106,53 +106,66 @@ export class CheckoutPage {
    * @param {string} details.zone - Provincia/Estado
    * @throws Error si algún campo no se puede completar
    */
-  async fillBillingDetails(details: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    telephone: string;
-    address1: string;
-    address2: string;
-    city: string;
-    postcode: string;
-    country: string;
-    zone: string;
-  }): Promise<void> {
-    await expect(this.firstNameInput).toBeVisible();
+async fillBillingDetails(details: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  telephone: string;
+  address1: string;
+  address2: string;
+  city: string;
+  postcode: string;
+  country: string;
+  zone: string;
+}): Promise<void> {
+  await expect(this.firstNameInput).toBeVisible();
 
-    await this.firstNameInput.fill(details.firstName);
-    await this.lastNameInput.fill(details.lastName);
-    await this.emailInput.fill(details.email);
-    await this.telephoneInput.fill(details.telephone);
-    await this.address1Input.fill(details.address1);
-    await this.address2Input.fill(details.address2);
-    await this.cityInput.fill(details.city);
-    await this.postcodeInput.fill(details.postcode);
+  await this.firstNameInput.fill(details.firstName);
+  await this.lastNameInput.fill(details.lastName);
+  await this.emailInput.fill(details.email);
+  await this.telephoneInput.fill(details.telephone);
+  await this.address1Input.fill(details.address1);
+  await this.address2Input.fill(details.address2);
+  await this.cityInput.fill(details.city);
+  await this.postcodeInput.fill(details.postcode);
 
-    // Select country - wait for population before selecting zone
-    await this.countrySelect.selectOption({ label: details.country });
+  // Select country
+  await this.countrySelect.selectOption({ label: details.country });
 
-    // Wait for zone to be populated after country selection
-    await this.page.waitForFunction(() => {
-      const options = document.querySelectorAll('#input-payment-zone option');
-      return Array.from(options).some(
-        (option) => option.textContent?.trim() !== '--- Please Select ---'
-      );
-    });
+  // Wait until the expected zone is available
+  await expect.poll(
+    async () => {
+      const options = await this.zoneSelect.locator('option').allTextContents();
+      return options.map(option => option.trim());
+    },
+    {
+      timeout: 15000,
+      message: `La zona "${details.zone}" no fue cargada para el país "${details.country}"`,
+    }
+  ).toContain(details.zone);
 
-    await this.zoneSelect.selectOption({ label: details.zone });
+  // Select zone
+  await this.zoneSelect.selectOption({ label: details.zone });
 
-    // Use same address for shipping
-    await expect(this.sameAddressCheckbox).toBeVisible();
+  // Validate selected zone
+  await expect(this.zoneSelect.locator('option:checked')).toHaveText(details.zone);
+
+  // Use same address for shipping
+  await expect(this.sameAddressCheckbox).toBeVisible();
+  if (!(await this.sameAddressCheckbox.isChecked())) {
     await this.sameAddressCheckbox.check();
-
-    await expect(this.guestContinueButton).toBeVisible();
-    await expect(this.guestContinueButton).toBeEnabled();
-    await this.guestContinueButton.click();
-
-    // Verify we moved to shipping step
-    await expect(this.shippingMethodRadio).toBeVisible();
   }
+
+  await expect(this.guestContinueButton).toBeVisible();
+  await expect(this.guestContinueButton).toBeEnabled();
+  await this.guestContinueButton.click();
+
+  // Verify checkout advanced to shipping step
+  await expect(this.page.locator('#collapse-shipping-method')).toBeVisible({
+    timeout: 20000,
+  });
+}
+
 
   /**
    * Selecciona el método de envío disponible
