@@ -42,8 +42,8 @@ export default defineConfig({
     
     /* Evidencias */
     trace: isCI ? 'on-first-retry' : 'on',
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    video: 'on',
+    screenshot: 'on',
 
     ignoreHTTPSErrors: true,
   },
