@@ -1,10 +1,58 @@
 import { Page, Locator, expect } from '@playwright/test';
+import * as fs from 'fs';
+import * as path from 'path';
 
 /**
  * Utilidades y helpers para pruebas de Playwright
  * Proporciona funciones comunes para interacciones con elementos
  */
+
+// Definir tipos para los datos de prueba
+export interface User {
+  firstName: string;
+  lastName: string;
+  email: string;
+  telephone: string;
+}
+
+export interface Address {
+  address1: string;
+  address2: string;
+  city: string;
+  postcode: string;
+  country: string;
+  zone: string;
+}
+
+export interface Product {
+  name: string;
+  category: string;
+  price: number;
+}
+
+export interface TestData {
+  users: {
+    guest: User;
+    registered: {
+      email: string;
+      password: string;
+    };
+  };
+  addresses: {
+    default: Address;
+  };
+  products: Product[];
+}
 export class TestHelpers {
+  /**
+   * Carga datos de prueba desde el archivo JSON
+   * @returns {TestData} Los datos de prueba parseados
+   */
+  static loadTestData(): TestData {
+    const filePath = path.join(__dirname, '../../config/test-data.json');
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  }
   /**
    * Selecciona una opción de un select por etiqueta.
    * Si la etiqueta no existe, selecciona la primera opción válida.

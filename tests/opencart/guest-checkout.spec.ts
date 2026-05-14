@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { CheckoutPage } from '../../src/pages/CheckoutPage';
+import { TestHelpers, TestData } from '../../src/utils/TestHelpers';
 
 /**
  * Suite de pruebas E2E para el flujo de Guest Checkout en OpenCart
@@ -11,9 +12,11 @@ import { CheckoutPage } from '../../src/pages/CheckoutPage';
  */
 test.describe('OpenCart Guest Checkout - End to End', () => {
   let checkoutPage: CheckoutPage;
+  let testData: TestData;
 
   test.beforeEach(async ({ page }) => {
     checkoutPage = new CheckoutPage(page);
+    testData = TestHelpers.loadTestData();
 
     // Navegar a la home
     await page.goto('/');
@@ -45,18 +48,11 @@ test.describe('OpenCart Guest Checkout - End to End', () => {
     await checkoutPage.selectGuestCheckout();
 
     // Step 4: Completar detalles de facturación
-    await checkoutPage.fillBillingDetails({
-      firstName: 'Test',
-      lastName: 'User',
-      email: 'test.user@example.com',
-      telephone: '0123456789',
-      address1: '123 Test Street',
-      address2: 'Suite 101',
-      city: 'London',
-      postcode: '8655454',
-      country: 'Colombia',
-      zone: 'Antioquia',
-    });
+    const billingDetails = {
+      ...testData.users.guest,
+      ...testData.addresses.default
+    };
+    await checkoutPage.fillBillingDetails(billingDetails);
 
     // Step 5: Seleccionar método de envío
     await checkoutPage.selectShippingMethod();
