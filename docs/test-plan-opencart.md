@@ -2,7 +2,7 @@
 
 ## Application Overview
 
-Prueba de flujo E2E de OpenCart para procesar un pedido como invitado mediante Guest Checkout, completando Billing Details, Delivery Details, Delivery Method, Payment Method y Confirm Order hasta la página de éxito.
+Plan de pruebas E2E de OpenCart para validar el flujo de compra y checkout de invitado, incluyendo selección de producto, carrito y proceso de pago.
 
 ## Test Scenarios
 
@@ -58,3 +58,30 @@ Prueba de flujo E2E de OpenCart para procesar un pedido como invitado mediante G
   15. Verificar el mensaje de éxito 'Your order has been placed!'
     - expect: El mensaje de confirmación está visible
     - expect: El proceso de checkout finaliza correctamente
+
+#### 1.2. Compra de iMac y checkout completo
+
+**File:** `tests/opencart/guest-checkout.spec.ts`
+
+**Steps:**
+  1. Navegar a https://opencart.abstracta.us
+    - expect: La página principal de OpenCart se carga correctamente
+    - expect: El encabezado o logo de OpenCart es visible
+  2. Seleccionar la categoría 'Desktops' y luego 'Mac'
+    - expect: La categoría 'Desktops' está abierta
+    - expect: La subcategoría 'Mac' se muestra y es seleccionada
+  3. Hacer clic en el producto 'iMac'
+    - expect: Se abre la página de detalles del producto iMac
+    - expect: El título del producto iMac es visible
+  4. Hacer clic en 'Add to Cart' para agregar iMac al carrito
+    - expect: El producto se añade al carrito
+    - expect: Aparece un mensaje de confirmación de agregación al carrito
+  5. Validar que el producto se añadió correctamente
+    - expect: El carrito muestra el producto iMac
+    - expect: El mensaje de éxito del carrito es visible
+  6. Ir a 'Shopping Cart'
+    - expect: La página de Shopping Cart se carga correctamente
+    - expect: El producto iMac aparece en el carrito
+  7. Completar el proceso de Checkout exitosamente desde el carrito
+    - expect: La página de Checkout se carga
+    - expect: El flujo de guest checkout permite avanzar hasta la confirmación de Pedido
